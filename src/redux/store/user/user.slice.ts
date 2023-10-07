@@ -26,8 +26,8 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUserData: (state,{payload}) => {
-            state = {...payload}
-            state.is_auth = true;
+            state.is_auth = true
+            state.login = payload.login
         }
     }
 })

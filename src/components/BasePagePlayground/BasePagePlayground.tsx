@@ -4,7 +4,7 @@ import {Background} from "../StyledComponents/Background";
 const BasePagePlayground:React.FC<any> = () => {
 
     return (
-        <Background>
+        <Background centered={true}>
             <Outlet/>
         </Background>
     )

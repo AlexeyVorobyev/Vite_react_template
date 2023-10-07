@@ -5,6 +5,7 @@ import React from "react";
 import {useLoginStatus} from "../functions/useLoginStatus";
 import {SignIn} from "../AuthPage/SignIn";
 import {SignUp} from "../AuthPage/SignUp";
+import {LandingPage} from "../LandingPage/LandingPage";
 
 const Router:React.FC = () => {
     const isAuth = useLoginStatus()
@@ -15,8 +16,9 @@ const Router:React.FC = () => {
                 <Routes>
                     <Route path={'/'} element={<Navigate to="/app/landing"/>} />
                     <Route path={'/app'} element={<BasePagePlayground/>}>
-                        <Route path={'landing'}/>
+                        <Route path={'landing'} element={<LandingPage/>}/>
                     </Route>
+                    <Route path='*' element={<Navigate to='/' />} />
                 </Routes>
             ) : (
                 <Routes>
@@ -25,6 +27,7 @@ const Router:React.FC = () => {
                         <Route path={'sign-in'} element={<SignIn/>}/>
                         <Route path={'sign-up'} element={<SignUp/>}/>
                     </Route>
+                    <Route path='*' element={<Navigate to='/' />} />
                 </Routes>
             )}
         </>
