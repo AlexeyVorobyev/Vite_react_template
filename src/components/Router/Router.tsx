@@ -1,13 +1,13 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import {AuthPageLayout} from "../AuthPage/AuthPageLayout";
+import {AuthPageLayout} from "../pages/AuthPage/AuthPageLayout";
 import React from "react";
 import {useLoginStatus} from "../functions/useLoginStatus";
-import {SignIn} from "../AuthPage/SignIn";
-import {SignUp} from "../AuthPage/SignUp";
-import {HandleRedirectPage} from "../HandleRedirectPage/handleRedirectPage";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store/store";
-import {AwaitMail} from "../AuthPage/AwaitMail";
+import {HandleRedirectPage} from "../pages/HandleRedirectPage/handleRedirectPage";
+import {AwaitMail} from "../pages/AuthPage/AwaitMail";
+import {SignIn} from "../pages/AuthPage/SignIn";
+import {SignUp} from "../pages/AuthPage/SignUp";
 
 const Router:React.FC = () => {
     const user = useSelector((state:RootState) => state.user)
@@ -18,11 +18,10 @@ const Router:React.FC = () => {
             {user.is_auth ? (
                 <Routes>
                     <Route path={'/'} element={<Navigate to="/app/landing"/>} />
-                    {/*<Route path={'/handleRedirect'} element={<HandleRedirectPage/>}/>*/}
-                    {/*<Route path={'/app'}>*/}
-                    {/*    <Route path={'landing'} element={<LandingPage/>}/>*/}
-                    {/*    <Route path={'analytics'} element={<AnalyticsPage/>}/>*/}
-                    {/*</Route>*/}
+                    <Route path={'/handleRedirect'} element={<HandleRedirectPage/>}/>
+                    <Route path={'/app'}>
+                        <Route path={'landing'} element={<div/>}/>
+                    </Route>
                     <Route path='*' element={<Navigate to='/app/landing'/>}/>
                 </Routes>
             ) : (

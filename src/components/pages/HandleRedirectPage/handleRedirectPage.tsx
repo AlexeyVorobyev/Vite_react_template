@@ -1,6 +1,6 @@
 import React from "react";
 import {Navigate, useSearchParams} from "react-router-dom";
-import {useLoginStatus} from "../functions/useLoginStatus";
+import {useLoginStatus} from "../../functions/useLoginStatus";
 
 const HandleRedirectPage:React.FC<any> = () => {
     const [searchParams] = useSearchParams()
