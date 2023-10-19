@@ -1,6 +1,7 @@
-import React from "react";
-import {FormControl, TextField} from "@mui/material";
+import React, {useState} from "react";
+import {FormControl, IconButton, TextField, InputAdornment} from "@mui/material";
 import {Controller, useFormContext} from "react-hook-form";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 interface Props {
     name:string
@@ -12,36 +13,55 @@ interface Props {
     }
     error?: boolean,
     errorText?:string
+    hidden?:boolean
 }
-export const CustomInput:React.FC<Props> =
-    ({
-        name,
-        defaultValue,
-        label,
-        required = false,
-        validateFunctions = undefined,
-        error = false,
-        errorText = undefined
-    }) => {
+const CustomInput:React.FC<Props> = ({
+    name,
+    defaultValue,
+    label,
+    required = false,
+    validateFunctions = undefined,
+    error = false,
+    errorText = undefined,
+    hidden = false
+}) => {
 
     const { control } = useFormContext()
+
+    const [showPassword, setShowPassword] = useState<boolean>(!hidden);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     return (
         <Controller
             name={name}
-            defaultValue={defaultValue || null}
+            defaultValue={defaultValue}
             control={control}
             rules={{validate:{
-                    required:required ? (value:string) => value?.length > 0 || 'required field' : () => true,
+                    required:required ? (value:string) => value?.length > 0 || 'обязательное поле' : () => true,
                     ...validateFunctions,
                 }}}
             render={({field : {onChange, value}}) => (
-                <FormControl fullWidth={true}>
+                <FormControl fullWidth>
                     <TextField
+                        type={showPassword ? "text" : "password"}
                         label={error && errorText ? `${label}, ${errorText}` : label}
                         value={value}
                         onChange={(event:any) => onChange(event.target.value)}
                         error={error}
+                        InputProps={{
+                            endAdornment: hidden ? (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ) : null
+                        }}
                     />
                 </FormControl>
             )
@@ -49,3 +69,5 @@ export const CustomInput:React.FC<Props> =
         />
     )
 }
+
+export {CustomInput}

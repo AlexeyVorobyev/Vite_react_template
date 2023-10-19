@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {CSSProperties, useEffect, useState} from "react";
 import {Controller, useFormContext} from "react-hook-form";
 import {UseLazyQuery} from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import {debounce} from "../../functions/debounce";
@@ -14,9 +14,10 @@ interface Props {
     required?:boolean
     optionsConfig?: {
         optionsReadFunction: (option:any) => Option
-        optionsPath: [string]
+        optionsPath: string[]
     }
     multiple?: boolean
+    style?:CSSProperties
 }
 export const CustomServerAutoComplete:React.FC<Props> =
     ({
@@ -27,7 +28,8 @@ export const CustomServerAutoComplete:React.FC<Props> =
         perPage = 5,
         required = false,
         optionsConfig,
-        multiple = false
+        multiple = false,
+        style
     }) => {
 
     const { control } = useFormContext()
@@ -37,11 +39,12 @@ export const CustomServerAutoComplete:React.FC<Props> =
     const debouncedLazyGetQuery = debounce(lazyGetQuery,350)
 
     useEffect(() => {
-        debouncedLazyGetQuery({dataBasePage:1, defaultPageSize:perPage, searchPattern: inputValue})
+        debouncedLazyGetQuery({page:0, size:perPage, name: inputValue})
     }, [inputValue])
 
     useEffect(() => {
         if (result.status !== 'fulfilled' || !result.currentData) return
+        console.log(result.currentData)
         if (optionsConfig) {
             let options = result.currentData as any
             optionsConfig.optionsPath.map((path) => options = options[path])
@@ -69,6 +72,7 @@ export const CustomServerAutoComplete:React.FC<Props> =
                     options={options}
                     required={required}
                     multiple={multiple}
+                    style={style}
                 />)
             }
         />

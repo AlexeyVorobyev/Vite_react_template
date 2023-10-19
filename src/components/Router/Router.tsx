@@ -1,33 +1,40 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import {AuthPageLayout} from "../AuthPage/AuthPageLayout";
-import {BasePagePlayground} from "../BasePagePlayground/BasePagePlayground";
 import React from "react";
 import {useLoginStatus} from "../functions/useLoginStatus";
 import {SignIn} from "../AuthPage/SignIn";
 import {SignUp} from "../AuthPage/SignUp";
-import {LandingPage} from "../LandingPage/LandingPage";
+import {HandleRedirectPage} from "../HandleRedirectPage/handleRedirectPage";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store/store";
+import {AwaitMail} from "../AuthPage/AwaitMail";
 
 const Router:React.FC = () => {
-    const isAuth = useLoginStatus()
+    const user = useSelector((state:RootState) => state.user)
+    useLoginStatus()
 
     return (
         <>
-            {isAuth ? (
+            {user.is_auth ? (
                 <Routes>
                     <Route path={'/'} element={<Navigate to="/app/landing"/>} />
-                    <Route path={'/app'} element={<BasePagePlayground/>}>
-                        <Route path={'landing'} element={<LandingPage/>}/>
-                    </Route>
-                    <Route path='*' element={<Navigate to='/' />} />
+                    {/*<Route path={'/handleRedirect'} element={<HandleRedirectPage/>}/>*/}
+                    {/*<Route path={'/app'}>*/}
+                    {/*    <Route path={'landing'} element={<LandingPage/>}/>*/}
+                    {/*    <Route path={'analytics'} element={<AnalyticsPage/>}/>*/}
+                    {/*</Route>*/}
+                    <Route path='*' element={<Navigate to='/app/landing'/>}/>
                 </Routes>
             ) : (
                 <Routes>
+                    <Route path={'/handleRedirect'} element={<HandleRedirectPage/>}/>
                     <Route path={'/'} element={<Navigate to="/auth/sign-in"/>} />
                     <Route path={'/auth'} element={<AuthPageLayout/>}>
+                        <Route path={'await-mail'} element={<AwaitMail/>}/>
                         <Route path={'sign-in'} element={<SignIn/>}/>
                         <Route path={'sign-up'} element={<SignUp/>}/>
                     </Route>
-                    <Route path='*' element={<Navigate to='/' />} />
+                    <Route path='*' element={<Navigate to='/auth/sign-in' />} />
                 </Routes>
             )}
         </>
